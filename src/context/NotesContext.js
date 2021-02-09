@@ -22,16 +22,6 @@ const notesReducer = (state, action) => {
       */
     case "delete_notes":
       return state.filter((note) => note.id !== action.payload);
-    case "add_notes":
-      return [
-        ...state,
-        {
-          id: Math.floor(Math.random() * 99999),
-          title: action.payload.title,
-          Note: action.payload.Note,
-          // title: `Note #${state.length + 1}`,
-        },
-      ];
     default:
       return state;
   }
@@ -50,8 +40,6 @@ const getNotes = (dispatch) => {
 const addNotes = (dispatch) => {
   return async (title, Note, callback) => {
     await jsonServer.post("/notes", { title, Note });
-
-    /* dispatch({ type: "add_notes", payload: { title, Note } }); */
     if (callback) {
       callback();
     }
@@ -59,13 +47,16 @@ const addNotes = (dispatch) => {
 };
 
 const deleteNotes = (dispatch) => {
-  return (id) => {
+  return async (id) => {
+    await jsonServer.delete(`/notes/${id}`);
     dispatch({ type: "delete_notes", payload: id });
   };
 };
 
 const editNotes = (dispatch) => {
-  return (id, title, Note, callback) => {
+  return async (id, title, Note, callback) => {
+    await jsonServer.put(`/notes/${id}`, { title, Note });
+
     dispatch({ type: "edit_notes", payload: { id, title, Note } });
     if (callback) {
       callback();
