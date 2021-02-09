@@ -34,7 +34,9 @@ const notesReducer = (state, action) => {
 const addNotes = (dispatch) => {
   return (title, Note, callback) => {
     dispatch({ type: "add_notes", payload: { title, Note } });
-    callback();
+    if (callback) {
+      callback();
+    }
   };
 };
 
@@ -45,8 +47,11 @@ const deleteNotes = (dispatch) => {
 };
 
 const editNotes = (dispatch) => {
-  return (id, title, Note) => {
+  return (id, title, Note, callback) => {
     dispatch({ type: "edit_notes", payload: { id, title, Note } });
+    if (callback) {
+      callback();
+    }
   };
 };
 

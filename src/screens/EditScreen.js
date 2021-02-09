@@ -13,7 +13,7 @@ const EditScreen = ({ navigation }) => {
     <NoteForm
       initialValues={{ title: note.title, Note: note.Note }}
       onSubmit={(title, Note) => {
-        editNotes(id, title, Note);
+        editNotes(id, title, Note, () => navigation.pop());
       }}
     />
   );
