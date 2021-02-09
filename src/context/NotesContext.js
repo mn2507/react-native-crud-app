@@ -9,7 +9,9 @@ const notesReducer = (state, action) => {
         ...state,
         {
           id: Math.floor(Math.random() * 99999),
-          title: `Note #${state.length + 1}`,
+          title: action.payload.title,
+          Note: action.payload.Note,
+          // title: `Note #${state.length + 1}`,
         },
       ];
     default:
@@ -18,8 +20,9 @@ const notesReducer = (state, action) => {
 };
 
 const addNotes = (dispatch) => {
-  return () => {
-    dispatch({ type: "add_notes" });
+  return (title, Note, callback) => {
+    dispatch({ type: "add_notes", payload: { title, Note } });
+    callback();
   };
 };
 
@@ -32,5 +35,5 @@ const deleteNotes = (dispatch) => {
 export const { Context, Provider } = createDataContext(
   notesReducer,
   { addNotes, deleteNotes },
-  []
+  [{ title: "Vanakkam", Note: "Magilchi", id: 1 }] //Populated for testing purpose
 );
