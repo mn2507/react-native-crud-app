@@ -2,6 +2,18 @@ import createDataContext from "./createDataContext";
 
 const notesReducer = (state, action) => {
   switch (action.type) {
+    case "edit_notes":
+      return state.map((note) => {
+        return note.id === action.payload.id ? action.payload : note;
+      });
+    /*
+        if (note.id === action.payload.id) {
+          return action.payload;
+        } else {
+          return note;
+        }
+      });
+      */
     case "delete_notes":
       return state.filter((note) => note.id !== action.payload);
     case "add_notes":
@@ -32,8 +44,14 @@ const deleteNotes = (dispatch) => {
   };
 };
 
+const editNotes = (dispatch) => {
+  return (id, title, Note) => {
+    dispatch({ type: "edit_notes", payload: { id, title, Note } });
+  };
+};
+
 export const { Context, Provider } = createDataContext(
   notesReducer,
-  { addNotes, deleteNotes },
+  { addNotes, deleteNotes, editNotes },
   [{ title: "Vanakkam", Note: "Magilchi", id: 1 }] //Populated for testing purpose
 );

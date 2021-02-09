@@ -1,30 +1,21 @@
-import React, { useState, useContext } from "react";
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import React, { useContext } from "react";
+import { StyleSheet } from "react-native";
 import { Context } from "../context/NotesContext";
+import NoteForm from "../components/NoteForm";
 
 const EditScreen = ({ navigation }) => {
-  const { state } = useContext(Context);
+  const id = navigation.getParam("id");
+  const { state, editNotes } = useContext(Context);
 
-  const note = state.find((note) => note.id === navigation.getParam("id"));
-
-  const [title, setTitle] = useState(note.title)
-  const [Note, setNote] = useState(note.Note)
+  const note = state.find((note) => note.id === id);
 
   return (
-    <View>
-      <Text >Edit Title:</Text>
-      <TextInput
-        
-        value={title}
-        onChangeText={(newTitle) => setTitle(newTitle)}
-      />
-      <Text >Edit Note:</Text>
-      <TextInput
-        
-        value={Note}
-        onChangeText={(newNote) => setNote(newNote)}
-      />
-    </View>
+    <NoteForm
+      initialValues={{ title: note.title, Note: note.Note }}
+      onSubmit={(title, Note) => {
+        editNotes(id, title, Note);
+      }}
+    />
   );
 };
 
