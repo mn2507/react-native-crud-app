@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,7 +12,27 @@ import { Context } from "../context/NotesContext";
 import { Feather } from "@expo/vector-icons";
 
 const IndexScreen = ({ navigation }) => {
-  const { state, deleteNotes } = useContext(Context);
+  const { state, deleteNotes, getNotes } = useContext(Context);
+
+  /* getNotes()
+    Do not call a method which changes the state in the body, to avoid an infinite loop.
+  */
+
+  useEffect(() => {
+    getNotes();
+
+    const listener = navigation.addListener("didFocus", () => {
+      getNotes();
+    });
+
+    return () => {
+      listener.remove();
+      /* This is to cleanup after implementing a listener, to avoid memory leak which 
+    is caused by listeners which are running in background even after a component is
+     removed. When a screen is completely removed, then this return function will be 
+     invoked. This will turn off the listeners that were created.*/
+    };
+  }, []);
 
   return (
     <View>
